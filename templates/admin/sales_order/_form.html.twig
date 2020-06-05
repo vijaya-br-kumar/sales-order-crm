@@ -1,0 +1,31 @@
+<form method="post" name="category" action="{{ path('sales_order_new') }}">
+    <fieldset class="border p-2 mb-3">
+        <legend>Client Details</legend>
+        <div class="form-group">
+            <label for="clientName">Name</label>
+            <input type="text" name="clientName" id="clientName" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="clientAddress">Location</label>
+            <input type="text" name="clientAddress" id="clientAddress" class="form-control" required>
+        </div>
+    </fieldset>
+    <fieldset class="border p-2 mb-3">
+        <legend>Order Items</legend>
+        <div class="form-group">
+            <label for="orderItems">Items</label>
+            <select multiple id="orderItems" class="form-control select2" name="orderItems[]" required>
+                {% for item in items %}
+                    <option value="{{ item.id }}" data-price="{{ item.price }}">{{ item.itemCode~' (Price-'~item.price~')' }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="totalPrice">Total Price</label>
+            <input type="text" name="totalPrice" id="totalPrice" class="form-control" readonly>
+        </div>
+    </fieldset>
+    <div class="form-group mb-0">
+        <button class="btn btn-success w-100" type="submit">Save</button>
+    </div>
+</form>

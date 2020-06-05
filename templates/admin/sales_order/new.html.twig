@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/stylesheets/admin/sales-order-create.css') }}">
+{% endblock %}
+
+{% block title %}New SalesOrder{% endblock %}
+
+{% block body %}
+    <div class="container-fluid p-0">
+        {% include 'admin/includes/navbar.html.twig' %}
+        <div class="row ml-0 mr-0">
+            <div class="border offset-md-4 col-md-4 mt-5 p-2">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h1 class="h3 mb-3 font-weight-normal text-center">Create New Sales Order</h1>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ include('admin/sales_order/_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row ml-0 mr-0">
+            <div class="offset-md-4 col-md-4 mt-2 p-0 mb-5">
+                <a href="{{ path('sales_order_index') }}" class="btn btn-sm btn-info">
+                    <span class="text-white font-weight-bold">Back to list</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            $('#totalPrice').val(0);
+        })
+        $("#orderItems").select2({
+            placeholder :'Select Items',
+            width: "100%",
+        });
+        $(document.body).on("change","#orderItems",function(){
+            let totalPrice = 0
+            $.each($('#orderItems').select2('data'), function (key, value) {
+                totalPrice += parseInt(value.element.dataset.price);
+            });
+            $('#totalPrice').val(totalPrice);
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin | Sign-up{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/stylesheets/admin/login.css') }}">
+{% endblock %}
+{% block bodyclass %}
+    body-background
+{% endblock %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="offset-md-4 col-md-4 bg-white mt-lg-4 p-4 login-form">
+            {% for flashError in app.flashes('verify_email_error') %}
+                <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+            {% endfor %}
+            <form method="post">
+                <h1 class="h3 mb-3 font-weight-normal text-center">Admin <span>|</span> Sign-up</h1>
+                <hr>
+                <div class="form-group">
+                    <label for="registration_form_firstName">First Name</label>
+                    {{ form_widget(registrationForm.firstName, {'attr':{'class':'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    <label for="registration_form_lastName">Last Name</label>
+                    {{ form_widget(registrationForm.lastName, {'attr':{'class':'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    <label for="registration_form_email">Username</label>
+                    {{ form_widget(registrationForm.username, {'attr':{'class':'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    <label for="registration_form_email">Email</label>
+                    {{ form_widget(registrationForm.email, {'attr':{'class':'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    <label for="registration_form_plainPassword">Password</label>
+                    {{ form_widget(registrationForm.plainPassword, {'attr':{'class':'form-control'}}) }}
+                </div>
+{#                <input type="hidden" name="registration_form__token" value="{{ csrf_token('register') }}">#}
+                <div class="form-group m-0">
+                    <button class="btn btn-primary w-100" type="submit">Admin <span>|</span> Sign-up</button>
+                    <p class="mt-3 mb-0">Already have an account? <a class="" href="{{ path('app_login') }}">Sign-in here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

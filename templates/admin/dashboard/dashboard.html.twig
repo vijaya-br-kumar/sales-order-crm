@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        legend{
+            width: auto;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid p-0">
+        {% include 'admin/includes/navbar.html.twig' %}
+        <div class="row m-0">
+            <div class="col-md-12 bg-info">
+                <p class="h2 text-center text-white display-4">Hello, {% if app.user is defined and app.user is not null %} {{ app.user.firstName }} {% endif %} welcome to dashboard</p>
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="col-md-10">
+                <canvas id="myChart" width="100" height="100"></canvas>
+            </div>
+            <div class="col-md-2 mt-5 pt-5 pl-0">
+                <form method="post" name="yearlyData" id="yearlyData">
+                    <fieldset class="border p-2 mb-3">
+                        <legend>Select the Year</legend>
+                        <div class="form-group">
+                            <label for="filterYear">Year</label>
+                            <select id="filterYear" class="form-control select2" name="filterYear" required>
+                                {% for year in years %}
+                                    <option value="{{ year }}">{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success w-100" type="submit">Filter</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="col-md-10">
+                <canvas id="yearlySales" width="100" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        let year = '{{ salesData.year }}';
+        let salesOrderCount = {{ currentYearSales | json_encode | raw }};
+        let salesDataApi = '{{ path('admin_dashboard_sales_data_api') }}';
+        let yearlySalesYear = {{ yearlySales.years | json_encode | raw }};
+        let yearlySalesData = {{ yearlySales.sales | json_encode | raw }};
+    </script>
+    <script src="{{ asset('assets/javascripts/admin/dashboard.js') }}"></script>
+{% endblock %}

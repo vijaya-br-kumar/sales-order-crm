@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ path('admin_dashboard') }}">Sales Order CRM</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item {% if app.request.attributes.get('_route') == 'admin_dashboard' %} active {% endif %}">
+                <a class="nav-link" href="{{ path('admin_dashboard') }}">Dashboard</a>
+            </li>
+            <li class="nav-item {% if app.request.attributes.get('_route') == 'sales_order_index' %} active {% endif %}">
+                <a class="nav-link" href="{{ path('sales_order_index') }}">Sales Order List</a>
+            </li>
+            <li class="nav-item {% if app.request.attributes.get('_route') == 'sales_order_new' %} active {% endif %}">
+                <a class="nav-link" href="{{ path('sales_order_new') }}">New Sales Order</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-danger font-weight-bold" href="{{ path('app_logout') }}">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% set flashMessages = app.flashes %}
+{% if (flashMessages | length) > 0 %}
+    <div class="row">
+        {% if flashMessages.success is defined %}
+            <div class="offset-md-2 col-md-8 mt-5">
+                {% for message in flashMessages.success %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if flashMessages.error is defined %}
+            <div class="offset-md-2 col-md-8 mt-5">
+                {% for message in flashMessages.error %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

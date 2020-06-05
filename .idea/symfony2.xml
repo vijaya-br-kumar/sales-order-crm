@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Symfony2PluginSettings">
+    <option name="pluginEnabled" value="true" />
+    <option name="containerFiles">
+      <list>
+        <container_file path="var/cache/dev/srcApp_KernelDevDebugContainer.xml" />
+      </list>
+    </option>
+    <option name="routingFiles">
+      <list>
+        <routing_file path="var/cache/dev/annotations.php" />
+        <routing_file path="var/cache/dev/serialization.php" />
+        <routing_file path="var/cache/dev/srcApp_KernelDevDebugContainer.php" />
+        <routing_file path="var/cache/dev/srcApp_KernelDevDebugContainer.preload.php" />
+        <routing_file path="var/cache/dev/UrlGenerator.php" />
+        <routing_file path="var/cache/dev/UrlMatcher.php" />
+        <routing_file path="var/cache/dev/validation.php" />
+      </list>
+    </option>
+  </component>
+</project>
