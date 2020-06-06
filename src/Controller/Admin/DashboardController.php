@@ -40,6 +40,7 @@ class DashboardController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $salesData = $em->getRepository(SalesOrder::class)->getCurrentYearSales($request->query->get('year', null));
+        $salesData['sales'] = array_values($salesData['sales']);
         $salesData['success'] = true;
         return new JsonResponse($salesData);
     }
