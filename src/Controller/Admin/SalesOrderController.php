@@ -65,9 +65,10 @@ class SalesOrderController extends AbstractController
     /**
      * @param Request $request
      * @param EntityManagerInterface $entityManager
+     * @param SalesOrder|null $oldSalesOrder
      * @return array
      */
-    private function validateSubmittedData(Request $request, EntityManagerInterface $entityManager)
+    private function validateSubmittedData(Request $request, EntityManagerInterface $entityManager, SalesOrder $oldSalesOrder = null)
     {
         $result = ['status' => false, 'message' => ""];
         $requestData = $request->request->all();
@@ -76,16 +77,27 @@ class SalesOrderController extends AbstractController
             if(($requestData['clientName'] ?? null) && ($requestData['clientAddress'] ?? null) && ($requestData['orderItems'] ?? null) && ($requestData['totalPrice'] ?? null))
             {
                 $user = $this->getUser();
-                $client = new Clients();
+                $client = ($oldSalesOrder instanceof SalesOrder) ? $oldSalesOrder->getClient() : new Clients();
                 $client->setName($requestData['clientName'])->setLocation($requestData['clientAddress']);
                 $entityManager->persist($client);
-                $salesOrder = new SalesOrder();
+                $salesOrder = ($oldSalesOrder instanceof SalesOrder) ? $oldSalesOrder : new SalesOrder();
                 $salesOrder->setAdmin($user)
                     ->setClient($client)
-                    ->setSalesOrderNo(sprintf("SO-%s", time()))
                     ->setTotalValue($requestData['totalPrice']);
+                if(is_null($oldSalesOrder))
+                {
+                    $salesOrder->setSalesOrderNo(sprintf("SO-%s", time()));
+                }
+                if($oldSalesOrder instanceof SalesOrder)
+                {
+                    foreach ($oldSalesOrder->getSalesOrderMappings() as $orderMapping)
+                    {
+                        $oldSalesOrder->removeSalesOrderMapping($orderMapping);
+                    }
+                }
                 $entityManager->persist($salesOrder);
                 $entityManager->flush();
+
                 foreach ($requestData['orderItems'] as $orderItem)
                 {
                     $item = $entityManager->getReference(SalesOrderItem::class, $orderItem);
@@ -108,5 +120,57 @@ class SalesOrderController extends AbstractController
             $result['message'] = sprintf("Server Error: %s", $exception->getMessage());
         }
         return $result;
+    }
+
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return Response
+     * @Route("/{id}/edit", name="sales_order_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, $id): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entity = $entityManager->getRepository(SalesOrder::class)->findOneBy(['id' => $id]);
+        if($entity instanceof SalesOrder)
+        {
+            $items = $entityManager->getRepository(SalesOrderItem::class)->getSalesOrderItems();
+            if($request->getMethod() == Request::METHOD_POST)
+            {
+                $isValid = $this->validateSubmittedData($request, $entityManager, $entity);
+                if($isValid['status'])
+                {
+                    return $this->redirectToRoute('sales_order_show', ['id' => $isValid['data']->getId()]);
+                }
+                else
+                {
+                    $this->addFlash('error', $isValid['message']);
+                }
+            }
+            return $this->render('admin/sales_order/edit.html.twig', [
+                'items' => $items, 'entity' => $entity
+            ]);
+        }
+        $this->addFlash('error', sprintf('Sales Order not found with Id: %s', $id));
+        return $this->redirectToRoute('sales_order_index');
+    }
+
+    /**
+     * @param Request $request
+     * @param SalesOrder $salesOrder
+     * @return Response
+     * @Route("/{id}", name="sales_order_delete", methods={"DELETE"})
+     */
+    public function delete(Request $request, SalesOrder $salesOrder): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$salesOrder->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($salesOrder);
+            $entityManager->flush();
+            $this->addFlash('success', "Successfully Removed the item");
+        }
+
+        return $this->redirectToRoute('sales_order_index');
     }
 }

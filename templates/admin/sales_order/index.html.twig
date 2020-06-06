@@ -6,17 +6,17 @@
     <div class="container-fluid p-0">
         {% include 'admin/includes/navbar.html.twig' %}
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <h1 class="h3 mb-3 mt-3 font-weight-normal text-center">Sales Order List</h1>
             </div>
-            <div class="col-md-4">
+            <div class="offset-md-3 col-md-4">
                 <a class="btn btn-sm btn-info float-right mt-4" href="{{ path('sales_order_new') }}">
                     <span class="text-white font-weight-bold">New Sales Order</span>
                 </a>
             </div>
         </div>
         <div class="row">
-            <div class="offset-md-2 col-md-8">
+            <div class="offset-md-1 col-md-10">
                 <table class="table table-striped text-center table-bordered">
                     <thead>
                     <tr>
@@ -44,6 +44,10 @@
                                 <a href="{{ path('sales_order_show', {'id': so.id}) }}" class="btn btn-sm btn-success">
                                     <span class="text-white font-weight-bold">Show</span>
                                 </a>
+                                <a href="{{ path('sales_order_edit', {'id': so.id}) }}" class="btn btn-sm btn-warning">
+                                    <span class="text-white font-weight-bold">Edit</span>
+                                </a>
+                                {% include 'admin/sales_order/_delete_form.html.twig' with {'entity': so} %}
                             </td>
                         </tr>
                     {% else %}

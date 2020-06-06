@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
-{% set formSubmitPath = path('sales_order_new') %}
+{% set formSubmitPath = path('sales_order_edit', {'id': entity.id}) %}
+
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('assets/stylesheets/admin/sales-order-create.css') }}">
 {% endblock %}
 
-{% block title %}New SalesOrder{% endblock %}
+{% block title %}Edit Sales Order{% endblock %}
 
 {% block body %}
     <div class="container-fluid p-0">
@@ -19,7 +20,7 @@
             <div class="border offset-md-4 col-md-4 p-2">
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <h1 class="h3 mb-3 font-weight-normal text-center">Create New Sales Order</h1>
+                        <h1 class="h3 mb-3 font-weight-normal text-center">Edit Sales Order</h1>
                         <hr>
                     </div>
                 </div>
@@ -31,8 +32,6 @@
             </div>
         </div>
     </div>
-
-
 {% endblock %}
 
 {% block javascripts %}

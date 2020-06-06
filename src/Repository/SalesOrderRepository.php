@@ -30,7 +30,7 @@ class SalesOrderRepository extends ServiceEntityRepository
             $year = ($year ?? date_format(new \DateTime(), 'Y'));
             $salesData['year'] = $year;
             $qb = $this->createQueryBuilder('so');
-            $data = $qb->select('count(so.id) as salesCount, MONTHNAME(so.createdAt) as monthName, MONTH(so.createdAt) as monthInt')
+            $data = $qb->select('sum(so.totalValue) as salesSum, MONTHNAME(so.createdAt) as monthName, MONTH(so.createdAt) as monthInt')
                 ->where('YEAR(so.createdAt) = :year')
                 ->andWhere('so.admin = :admin')
                 ->groupBy('monthInt')
@@ -42,7 +42,7 @@ class SalesOrderRepository extends ServiceEntityRepository
                 $salesData['months'] = array_column($data, 'monthName');
                 foreach ($data as $value)
                 {
-                    $salesData['sales'][$value['monthInt']] = $value['salesCount'];
+                    $salesData['sales'][$value['monthInt']] = $value['salesSum'];
                 }
             }
             $salesData['sales'] = array_values($salesData['sales']);
@@ -59,7 +59,7 @@ class SalesOrderRepository extends ServiceEntityRepository
         try
         {
             $qb = $this->createQueryBuilder('so');
-            $data = $qb->select('count(so.id) as salesCount, YEAR(so.createdAt) as yearInt')
+            $data = $qb->select('sum(so.totalValue) as salesSum, YEAR(so.createdAt) as yearInt')
                 ->where('so.admin = :admin')
                 ->groupBy('yearInt')
                 ->setParameter('admin', ($this->tokenStorage->getToken()->getUser() ?? ""))
@@ -68,7 +68,7 @@ class SalesOrderRepository extends ServiceEntityRepository
             {
                 foreach ($data as $value)
                 {
-                    $salesData['sales'][$value['yearInt']] = $value['salesCount'];
+                    $salesData['sales'][$value['yearInt']] = $value['salesSum'];
                 }
             }
         }

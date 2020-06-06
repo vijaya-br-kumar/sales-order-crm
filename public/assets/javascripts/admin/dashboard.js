@@ -11,7 +11,7 @@ let chart = new Chart(ctx, {
     data: {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             datasets: [{
-                label: 'Sales Order Count',
+                label: 'Sales Order Total Value',
                 borderColor: 'rgb(255, 99, 132)',
                 data: salesOrderCount
         }]
@@ -39,7 +39,7 @@ let chart = new Chart(ctx, {
                 display: true,
                 scaleLabel: {
                     display: true,
-                    labelString: 'Sales Count'
+                    labelString: 'Sales Order Total'
                 },
                 ticks: {
                     beginAtZero: true,
@@ -51,7 +51,7 @@ let chart = new Chart(ctx, {
         },
         title: {
             display: true,
-                text: 'Sales Order Details'
+                text: 'Month wise Sales Order'
         },
         responsive: true,
             maintainAspectRatio: false
@@ -98,7 +98,7 @@ let yearlyChart = new Chart(yearlyChartElement, {
     data: {
         labels: yearlySalesYear,//['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [{
-            label: 'Sales Order Count',
+            label: 'Sales Order Total Value',
             borderColor: 'rgb(19,189,206)',
             data: yearlySalesData
         }]
@@ -126,7 +126,7 @@ let yearlyChart = new Chart(yearlyChartElement, {
                 display: true,
                 scaleLabel: {
                     display: true,
-                    labelString: 'Sales Count'
+                    labelString: 'Sales Order Total'
                 },
                 ticks: {
                     beginAtZero: true,
